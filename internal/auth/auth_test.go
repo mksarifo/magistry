@@ -72,6 +72,9 @@ func TestSessionRevocationExpiryAndDockerBasic(t *testing.T) {
 		t.Fatal("expired session accepted")
 	}
 	r.SetBasicAuth("admin", "secret")
+	if m.SessionUser(r) != "" {
+		t.Fatal("Basic credentials created a browser session")
+	}
 	if m.User(r, false) != "admin" {
 		t.Fatal("Docker Basic authentication failed")
 	}

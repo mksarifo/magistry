@@ -141,7 +141,7 @@ function AuthScreen({
               autoComplete="username"
               minLength={setup ? 3 : 1}
               maxLength={setup ? 32 : 128}
-              pattern={setup ? "[a-zA-Z0-9][a-zA-Z0-9_.-]{2,31}" : undefined}
+              pattern={setup ? "[a-zA-Z0-9][a-zA-Z0-9_.\\-]{2,31}" : undefined}
             />
           </label>
           <label>

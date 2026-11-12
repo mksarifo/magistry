@@ -27,7 +27,7 @@ No images are seeded by default. Images survive container restarts and `docker c
 
 ## Authentication and remote access
 
-The default port binds to `127.0.0.1`. Authentication is always required for the management API and Docker registry. The first-run screen creates one administrator; public account registration closes immediately afterward. Passwords use salted PBKDF2-HMAC-SHA256 with 600,000 iterations and are never stored in plaintext. Browser sign-in uses a random, revocable HttpOnly / SameSite=Strict cookie with a 24-hour lifetime. Sign-out revokes the session, and app restarts end browser sessions. Docker uses HTTP Basic authentication with the same administrator credentials. Failed login attempts are rate limited.
+The default port binds to `127.0.0.1`. Authentication is always required for the management API and Docker registry. The first-run screen creates one administrator; public account registration closes immediately afterward. Accounts created in the UI store only salted PBKDF2-HMAC-SHA256 password hashes with 600,000 iterations. Browser sign-in uses a random, revocable HttpOnly / SameSite=Strict cookie with a 24-hour lifetime. Sign-out revokes the session, and app restarts end browser sessions. Docker uses HTTP Basic authentication with the same administrator credentials. Failed login attempts are rate limited.
 
 For deployment-managed credentials or account recovery, set both `AUTH_USERNAME` and `AUTH_PASSWORD` in `.env`, then run `docker compose up -d`. These override the stored administrator while configured; removing them restores the stored account. There are no roles or per-repository permissions. Back up both volumes, including the administrator account, before maintenance.
 

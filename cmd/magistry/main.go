@@ -54,7 +54,7 @@ func main() {
 	defer stop()
 	serveErr := make(chan error, 1)
 	go func() {
-		slog.Info("Magistry listening", "address", app.Addr, "authentication", user != "")
+		slog.Info("Magistry listening", "address", app.Addr, "authentication", true, "setup_required", !authManager.Configured())
 		serveErr <- app.ListenAndServe()
 	}()
 	select {

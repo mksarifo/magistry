@@ -22,7 +22,6 @@ import {
   ShieldCheck,
   Terminal,
   Trash2,
-  X,
 } from "lucide-react";
 import { Modal } from "./Modal";
 import { api } from "./api";
@@ -796,7 +795,7 @@ function App({
             {command(`docker push ${registry}/my-app:latest`)}
             <h3>Pull an image</h3>
             {command(`docker pull ${registry}/my-app:latest`)}
-            <h3>Log in (when authentication is configured)</h3>
+            <h3>Log in from Docker</h3>
             {command(`docker login ${registry}`)}
           </div>
           <div className="dialog-note">

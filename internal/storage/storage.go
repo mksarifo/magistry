@@ -72,6 +72,9 @@ func (m *Manager) Usage(ctx context.Context) (Usage, error) {
 	}
 	err := filepath.WalkDir(m.root, func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
+			if os.IsNotExist(err) {
+				return nil
+			}
 			return err
 		}
 		if err := ctx.Err(); err != nil {
@@ -82,6 +85,9 @@ func (m *Manager) Usage(ctx context.Context) (Usage, error) {
 		}
 		info, err := d.Info()
 		if err != nil {
+			if os.IsNotExist(err) {
+				return nil
+			}
 			return err
 		}
 		size := info.Size()
