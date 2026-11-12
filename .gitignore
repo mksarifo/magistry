@@ -1,0 +1,9 @@
+node_modules/
+web/dist/
+.env
+.magistry/
+bin/
+*.log
+*.tsbuildinfo
+.DS_Store
+.idea/

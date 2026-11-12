@@ -1,0 +1,54 @@
+services:
+  storage-init:
+    image: alpine:3.23
+    user: "0:0"
+    command: ["chown", "-R", "10001:10001", "/var/lib/registry", "/var/lib/magistry"]
+    volumes:
+      - registry-data:/var/lib/registry
+      - app-data:/var/lib/magistry
+  registry:
+    image: registry:3
+    restart: unless-stopped
+    user: "10001:10001"
+    command: ["serve", "/etc/distribution/config.yml"]
+    environment:
+      REGISTRY_STORAGE_DELETE_ENABLED: "true"
+      REGISTRY_HTTP_RELATIVEURLS: "true"
+      REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY: /var/lib/registry
+    volumes:
+      - registry-data:/var/lib/registry
+      - ./docker/registry.yml:/etc/distribution/config.yml:ro
+    depends_on:
+      storage-init:
+        condition: service_completed_successfully
+    networks:
+      - registry-internal
+
+  app:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "${BIND_ADDRESS:-127.0.0.1}:${PORT:-5050}:5000"
+    environment:
+      REGISTRY_URL: http://registry:5000
+      PUBLIC_REGISTRY: ${PUBLIC_REGISTRY:-localhost:5050}
+      AUTH_USERNAME: ${AUTH_USERNAME:-}
+      AUTH_PASSWORD: ${AUTH_PASSWORD:-}
+      COOKIE_SECURE: ${COOKIE_SECURE:-false}
+    volumes:
+      - registry-data:/var/lib/registry
+      - app-data:/var/lib/magistry
+    depends_on:
+      storage-init:
+        condition: service_completed_successfully
+      registry:
+        condition: service_started
+    networks:
+      - registry-internal
+
+volumes:
+  registry-data:
+  app-data:
+
+networks:
+  registry-internal:
